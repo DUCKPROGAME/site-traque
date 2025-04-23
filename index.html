@@ -2,7 +2,39 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Traque Éthique</title>
+  <title>Suivi Éthique</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1f1f1f;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    a {
+      color: #4fc3f7;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li::before {
+      content: '• ';
+      color: #4fc3f7;
+    }
+  </style>
 </head>
 <body>
   <h1>Générateur de lien de suivi</h1>
@@ -31,10 +63,12 @@
       const cam = localStorage.getItem("cam");
       const mic = localStorage.getItem("mic");
 
-      if (geo) document.getElementById("geo").innerText = "Géo : " + geo;
-      if (browser) document.getElementById("browser").innerText = "Navigateur : " + browser;
-      if (cam) document.getElementById("cam").innerText = "Caméra : " + cam;
-      if (mic) document.getElementById("mic").innerText = "Micro : " + mic;
+      document.getElementById("geo").innerText = geo ? `Géo : ${geo}` : "Géo : non détectée";
+      document.getElementById("browser").innerText = browser ? `Navigateur : ${browser}` : "Navigateur : inconnu";
+      document.getElementById("cam").innerText = cam === "Activée" ? "✅ Caméra : Activée" :
+                                                cam === "Refusée" ? "❌ Caméra : Refusée" : "Caméra : Inconnue";
+      document.getElementById("mic").innerText = mic === "Activé" ? "✅ Micro : Activé" :
+                                                mic === "Refusé" ? "❌ Micro : Refusé" : "Micro : Inconnu";
     };
   </script>
 </body>
