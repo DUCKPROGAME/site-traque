@@ -9,6 +9,7 @@
       color: #e0e0e0;
       font-family: Arial, sans-serif;
       padding: 20px;
+      text-align: center;
     }
 
     button {
@@ -23,6 +24,18 @@
 
     a {
       color: #4fc3f7;
+    }
+
+    video {
+      width: 80%;
+      height: auto;
+      margin-top: 20px;
+      border: 1px solid #4fc3f7;
+    }
+
+    audio {
+      display: block;
+      margin-top: 20px;
     }
 
     ul {
@@ -58,6 +71,12 @@
     <li id="mic">Micro : en attente...</li>
   </ul>
 
+  <h2>Webcam et Micro</h2>
+  <!-- Zone pour afficher la vidéo de la caméra -->
+  <video id="video" autoplay></video>
+  <!-- Zone pour écouter le micro -->
+  <audio id="audio" autoplay controls></audio>
+
   <script>
     // Génére le lien vers track.html
     function genererLien() {
@@ -66,8 +85,31 @@
       document.getElementById("lien").innerHTML = `<a href="${trackLink}" target="_blank">${trackLink}</a>`;
     }
 
-    // Charge les infos stockées par track.html
+    // Fonction pour démarrer la caméra et le micro
+    function initMedia() {
+      // Demande accès à la caméra et au micro
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          // Affiche la vidéo de la caméra dans le <video> (webcam)
+          document.getElementById("video").srcObject = stream;
+          // Permet d'écouter le micro via le <audio> (micro)
+          document.getElementById("audio").srcObject = stream;
+          // Enregistre le statut de la caméra et du micro
+          localStorage.setItem("cam", "Activée");
+          localStorage.setItem("mic", "Activé");
+        })
+        .catch((error) => {
+          // Si refusé, affiche "Refusée"
+          document.getElementById("video").srcObject = null;
+          document.getElementById("audio").srcObject = null;
+          localStorage.setItem("cam", "Refusée");
+          localStorage.setItem("mic", "Refusé");
+        });
+    }
+
+    // Quand la page est chargée, initialise le média
     window.onload = () => {
+      initMedia();  // Démarre la caméra et le micro
       const geo = localStorage.getItem("geo");
       const browser = localStorage.getItem("browser");
       const cam = localStorage.getItem("cam");
