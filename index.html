@@ -1,94 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Générer un Lien de Traque</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      text-align: center;
-      padding: 50px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1.2em;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-    #generatedLink {
-      margin-top: 20px;
-      font-size: 1.1em;
-      color: #0066cc;
-    }
-    .info {
-      margin-top: 40px;
-      background-color: #d1e7ff;
-      padding: 20px;
-      border-radius: 5px;
-      display: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Traque Éthique</title>
 </head>
 <body>
+  <h1>Générateur de lien de suivi</h1>
 
-  <h1>Générer un Lien de Traque</h1>
-  <p>Cliquez sur le bouton pour générer un lien unique que vous pouvez partager.</p>
+  <button onclick="genererLien()">Générer le lien</button>
+  <p id="lien"></p>
 
-  <button onclick="generateLink()">Générer Lien</button>
-  
-  <div id="generatedLink" style="display:none;">
-    <p><strong>Lien généré :</strong> <a id="link" href="#" target="_blank"></a></p>
-  </div>
-
-  <div id="trackInfo" class="info">
-    <h3>Informations collectées :</h3>
-    <p id="geo">Géolocalisation : En attente...</p>
-    <p id="browser">Navigateur : En attente...</p>
-    <p id="cameraStatus">Caméra : En attente...</p>
-    <p id="microStatus">Microphone : En attente...</p>
-  </div>
+  <h2>Infos collectées</h2>
+  <ul>
+    <li id="geo">Géo : en attente...</li>
+    <li id="browser">Navigateur : en attente...</li>
+    <li id="cam">Caméra : en attente...</li>
+    <li id="mic">Micro : en attente...</li>
+  </ul>
 
   <script>
-    function generateLink() {
-      const uniqueId = Date.now();  // Créer un ID unique basé sur l'heure
-      const link = `track.html?id=${uniqueId}`;  // Générer le lien
-      const linkElement = document.getElementById('link');
-      
-      // Mettre à jour l'élément avec le lien généré
-      linkElement.href = link;
-      linkElement.textContent = link;
-      
-      // Afficher le lien généré
-      document.getElementById('generatedLink').style.display = 'block';
+    // Génére le lien vers track.html
+    function genererLien() {
+      const baseUrl = window.location.href.replace("index.html", "");
+      const trackLink = baseUrl + "track.html";
+      document.getElementById("lien").innerHTML = `<a href="${trackLink}" target="_blank">${trackLink}</a>`;
     }
 
-    // Vérifier les informations collectées depuis track.html via localStorage
-    function checkCollectedData() {
-      const geo = localStorage.getItem('geo');
-      const browser = localStorage.getItem('browser');
-      const cameraStatus = localStorage.getItem('cameraStatus');
-      const microStatus = localStorage.getItem('microStatus');
+    // Charge les infos stockées par track.html
+    window.onload = () => {
+      const geo = localStorage.getItem("geo");
+      const browser = localStorage.getItem("browser");
+      const cam = localStorage.getItem("cam");
+      const mic = localStorage.getItem("mic");
 
-      if (geo || browser || cameraStatus || microStatus) {
-        document.getElementById('geo').textContent = `Géolocalisation : ${geo || 'Non disponible'}`;
-        document.getElementById('browser').textContent = `Navigateur : ${browser || 'Non disponible'}`;
-        document.getElementById('cameraStatus').textContent = `Caméra : ${cameraStatus || 'Non activée'}`;
-        document.getElementById('microStatus').textContent = `Microphone : ${microStatus || 'Non activé'}`;
-        document.getElementById('trackInfo').style.display = 'block';
-      } else {
-        document.getElementById('trackInfo').style.display = 'none';
-      }
-    }
-
-    // Appeler cette fonction au chargement de la page
-    window.onload = checkCollectedData;
+      if (geo) document.getElementById("geo").innerText = "Géo : " + geo;
+      if (browser) document.getElementById("browser").innerText = "Navigateur : " + browser;
+      if (cam) document.getElementById("cam").innerText = "Caméra : " + cam;
+      if (mic) document.getElementById("mic").innerText = "Micro : " + mic;
+    };
   </script>
-
 </body>
 </html>
