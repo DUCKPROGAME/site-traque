@@ -19,14 +19,12 @@
   </ul>
 
   <script>
-    // Génére le lien vers track.html
     function genererLien() {
       const baseUrl = window.location.href.replace("index.html", "");
       const trackLink = baseUrl + "track.html";
       document.getElementById("lien").innerHTML = `<a href="${trackLink}" target="_blank">${trackLink}</a>`;
     }
 
-    // Charge les infos stockées par track.html
     window.onload = () => {
       const geo = localStorage.getItem("geo");
       const browser = localStorage.getItem("browser");
