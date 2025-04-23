@@ -2,13 +2,13 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Track</title>
+  <title>Collecte en cours...</title>
 </head>
 <body>
-  <h1>Collecte en cours...</h1>
+  <h1>Collecte des données...</h1>
 
   <script>
-    // GEOLOCALISATION
+    // GÉOLOCALISATION
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -23,10 +23,10 @@
       localStorage.setItem("geo", "Non supportée");
     }
 
-    // BROWSER
+    // INFOS NAVIGATEUR
     localStorage.setItem("browser", navigator.userAgent);
 
-    // CAM & MICRO
+    // CAMÉRA & MICRO
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((stream) => {
         localStorage.setItem("cam", "Activée");
@@ -38,10 +38,10 @@
         localStorage.setItem("mic", "Refusé");
       });
 
-    // ATTENTE AVANT REDIRECTION (donner le temps d’enregistrer)
+    // REDIRECTION APRÈS 5 SECONDES
     setTimeout(() => {
       window.location.replace("index.html");
-    }, 5000); // <-- allonge un peu le délai
+    }, 5000);
   </script>
 </body>
 </html>
