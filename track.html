@@ -24,8 +24,26 @@
 <body>
   <h1>Collecte des données...</h1>
   <p>Merci de patienter, vous allez être redirigé dans 5 secondes.</p>
+  <p id="clickStatus"></p>
 
   <script>
+    // Fonction pour enregistrer un clic
+    function enregistrerClic() {
+      const clicDate = new Date().toLocaleString(); // Heure du clic
+      localStorage.setItem('clicTime', clicDate); // Enregistre l'heure dans localStorage
+      document.getElementById('clickStatus').innerText = `Dernier clic enregistré à : ${clicDate}`;
+    }
+
+    // Lien de suivi
+    const lienSuivi = document.createElement('a');
+    lienSuivi.href = '#';
+    lienSuivi.innerText = 'Cliquez ici pour suivre votre action';
+    lienSuivi.addEventListener('click', () => {
+      enregistrerClic(); // Enregistrer le clic quand l'utilisateur clique sur le lien
+    });
+
+    document.body.appendChild(lienSuivi);
+
     // GÉOLOCALISATION
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
