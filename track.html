@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Suivi</title>
+    <style>
+        /* Styles pour la page de suivi */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .track-info {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Page de Suivi</h1>
+<p>Merci d'avoir suivi le lien ! Voici les informations relatives à votre suivi :</p>
+
+<div class="track-info" id="trackInfo">
+    <p>Chargement des informations de suivi...</p>
+</div>
+
+<script>
+// Fonction pour récupérer les paramètres de l'URL
+function getQueryParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+// Récupérer le track_id depuis l'URL
+let trackId = getQueryParameter('track_id');
+
+// Afficher les informations de suivi
+if (trackId) {
+    document.getElementById('trackInfo').innerHTML = `
+        <p>Votre identifiant de suivi est : <strong>${trackId}</strong></p>
+        <p>Ce lien a été généré à partir de notre générateur de suivi. Nous avons enregistré votre action à ${new Date().toLocaleString()}.</p>
+    `;
+} else {
+    document.getElementById('trackInfo').innerHTML = `
+        <p>Aucune information de suivi n'a été trouvée. Vérifiez le lien et réessayez.</p>
+    `;
+}
+</script>
+
+</body>
+</html>
 
