@@ -1,1 +1,89 @@
-  
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Lien de Suivi</title>
+    <style>
+        /* Styles pour la bannière de consentement */
+        #consentBanner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        #consentBanner button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        /* Styles pour le lien généré */
+        #generatedLink {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #generatedLink a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        #generatedLink a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Bannière de consentement -->
+<div id="consentBanner">
+    <p>Ce site utilise des cookies et collecte certaines informations. Acceptez-vous cela ?</p>
+    <button id="acceptConsent">Accepter</button>
+</div>
+
+<h1>Générer un lien de suivi</h1>
+<p><button id="generateLinkButton">Générer un lien de suivi</button></p>
+
+<!-- Zone pour afficher le lien généré -->
+<div id="generatedLink">
+    <p>Voici votre lien de suivi :</p>
+    <a href="#" id="trackLink" download="fichier.txt">Télécharger le fichier de suivi</a>
+</div>
+
+<script>
+// Vérifiez si l'utilisateur a déjà donné son consentement
+if (!localStorage.getItem('userConsent')) {
+    document.getElementById('consentBanner').style.display = 'block';
+} else {
+    document.getElementById('consentBanner').style.display = 'none';
+}
+
+// Lorsque l'utilisateur accepte le consentement
+document.getElementById('acceptConsent').addEventListener('click', function () {
+    localStorage.setItem('userConsent', 'accepted');
+    document.getElementById('consentBanner').style.display = 'none';
+});
+
+// Fonction pour générer le lien de suivi
+document.getElementById('generateLinkButton').addEventListener('click', function () {
+    // Vérifier si le consentement a été donné avant de générer le lien
+    if (localStorage.getItem('userConsent') === 'accepted') {
+        // Créer un lien qui pointe vers la page track.html
+        let trackingLink = window.location.href.replace('index.html', 'track.html') + '?track_id=' + new Date().getTime();
+        
+        // Afficher le lien généré à l'utilisateur
+        document.getElementById('generatedLink').style.display = 'block';
+        document.getElementById('trackLink').href = trackingLink;
+    } else {
+        alert('Vous devez accepter le consentement avant de générer un lien.');
+    }
+});
+</script>
+
+</body>
+</html>
