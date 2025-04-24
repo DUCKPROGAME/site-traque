@@ -36,6 +36,11 @@
         #generatedLink a:hover {
             text-decoration: underline;
         }
+        /* Styles pour le bouton de téléchargement */
+        #downloadButton {
+            display: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -52,11 +57,16 @@
 <!-- Zone pour afficher le lien généré -->
 <div id="generatedLink">
     <p>Voici votre lien de suivi :</p>
-    <a href="#" id="trackLink" download="fichier.txt">Télécharger le fichier de suivi</a>
+    <a href="#" id="trackLink" target="_blank">Ouvrir le lien de suivi</a>
+</div>
+
+<!-- Zone pour le bouton de téléchargement -->
+<div id="downloadButton">
+    <button id="downloadFile">Télécharger le fichier de suivi</button>
 </div>
 
 <script>
-// Vérifiez si l'utilisateur a déjà donné son consentement
+// Vérifie si l'utilisateur a déjà donné son consentement
 if (!localStorage.getItem('userConsent')) {
     document.getElementById('consentBanner').style.display = 'block';
 } else {
@@ -71,14 +81,34 @@ document.getElementById('acceptConsent').addEventListener('click', function () {
 
 // Fonction pour générer le lien de suivi
 document.getElementById('generateLinkButton').addEventListener('click', function () {
-    // Vérifier si le consentement a été donné avant de générer le lien
+    // Vérifie si le consentement a été donné avant de générer le lien
     if (localStorage.getItem('userConsent') === 'accepted') {
-        // Créer un lien qui pointe vers la page track.html
+        // Crée un lien qui pointe vers la page track.html
         let trackingLink = window.location.href.replace('index.html', 'track.html') + '?track_id=' + new Date().getTime();
         
-        // Afficher le lien généré à l'utilisateur
+        // Affiche le lien généré à l'utilisateur
         document.getElementById('generatedLink').style.display = 'block';
         document.getElementById('trackLink').href = trackingLink;
+
+        // Affiche le bouton pour télécharger le fichier
+        document.getElementById('downloadButton').style.display = 'block';
+
+        // Prépare le fichier de suivi à télécharger
+        document.getElementById('downloadFile').addEventListener('click', function () {
+            // Crée un contenu textuel pour le fichier
+            let fileContent = 'ID de suivi : ' + trackingLink.split('=')[1] + '\n';
+            fileContent += 'Date de création : ' + new Date().toLocaleString() + '\n';
+
+            // Crée un objet Blob à partir du contenu
+            let blob = new Blob([fileContent], { type: 'text/plain' });
+
+            // Crée un lien de téléchargement
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'suivi_' + new Date().getTime() + '.txt';
+            link.click();
+        });
+
     } else {
         alert('Vous devez accepter le consentement avant de générer un lien.');
     }
